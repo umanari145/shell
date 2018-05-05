@@ -1,0 +1,3 @@
+/usr/sbin/fcgiwrap
+glassfish
+mysql

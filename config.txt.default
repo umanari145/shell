@@ -1,0 +1,5 @@
+TARGET_HOST='hogehoge'
+SSH_PORT='2222'
+USER_ID='sampleuser'
+PASSWORD='samplepass'
+SSH_KEY='/home/sampleuser/.ssh/id_rsa'
