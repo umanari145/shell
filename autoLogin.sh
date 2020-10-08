@@ -36,32 +36,16 @@ auto_ssh() {
 	fi
 }
 
-##
-## 自動ログインしコマンド実行
-##
-auto_scp() {
-	host=$1
-	port=$2
-	id=$3
-	pass=$4
-	ssh_key=$5
-	mode=$6
-	myself=$7
-	remote=$8
+auto_ssh_with_config() {
+	ssh_account=$1
+	pass=$2
+	ssh_key=$3
+	command=$4
 
-	fileCommand=""
-	if [ ${mode} = "download" ];then
-		fileCommand="${id}@${host}:${remote} ${myself}"
-	elif [ ${mode} = "upload" ];then
-		fileCommand=" ${myself} ${id}@${host}:${remote}"
-	fi
-
-	#statements
-	#空白じゃなければ
 	if [ -n "${ssh_key}" ]; then
 		expect -c "
 			set timeout 10
-			spawn scp -P ${port}  -i ${ssh_key} ${fileCommand}
+			spawn ssh -t ${ssh_account}  ${command}
 			expect \"Enter passphrase for key ${ssh_key} :\"
 			send \"${pass}\n\"
 			expect eof
@@ -70,7 +54,7 @@ auto_scp() {
 	else
 		expect -c "
 			set timeout 10
-			spawn scp -P ${port}  ${fileCommand}
+			spawn ssh ${id}@${host} -p ${port} ${command}
 			expect \"Are you sure you want to continue connecting (yes/no)?\" {
 			send \"yes\n\"
 			expect \"${id}@${host}'s password:\"
