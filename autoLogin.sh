@@ -14,7 +14,7 @@ auto_ssh() {
 		expect -c "
 			set timeout 10
 			spawn ssh ${id}@${host} -p ${port}  -i ${ssh_key}  ${command}
-			expect \"Enter passphrase for key ${ssh_key} :\"
+			expect ":"
 			send \"${pass}\n\"
 			expect eof
 			exit
@@ -36,34 +36,26 @@ auto_ssh() {
 	fi
 }
 
+
+
+#すでに.ssh/configで設定がある場合は一気にいけるので、下記のようなシンプルなパターンでOK
+
+auto_ssh_with_config "ユーザー@ホスト" "パスワード" "コマンド"
+auto_ssh_with_config "ユーザー@ホスト" "パスワード" "コマンド"
+
+
 auto_ssh_with_config() {
 	ssh_account=$1
 	pass=$2
 	ssh_key=$3
 	command=$4
 
-	if [ -n "${ssh_key}" ]; then
-		expect -c "
+	expect -c "
 			set timeout 10
-			spawn ssh -t ${ssh_account}  ${command}
-			expect \"Enter passphrase for key ${ssh_key} :\"
-			send \"${pass}\n\"
+			spawn ssh -t ${ssh_account} ${command}
+			expect ":"
+			send \"${pass}\n\"			
 			expect eof
 			exit
 "
-	else
-		expect -c "
-			set timeout 10
-			spawn ssh ${id}@${host} -p ${port} ${command}
-			expect \"Are you sure you want to continue connecting (yes/no)?\" {
-			send \"yes\n\"
-			expect \"${id}@${host}'s password:\"
-			send \"${pass}\n\"
-		} \"${id}@${host}'s password:\" {
-			send \"${pass}\n\"
-		}
-		expect eof
-		exit
-"
-	fi
 }
