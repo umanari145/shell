@@ -39,15 +39,15 @@ auto_ssh() {
 
 
 #すでに.ssh/configで設定がある場合は一気にいけるので、下記のようなシンプルなパターンでOK
-
-auto_ssh_with_config "ユーザー@ホスト" "パスワード" "コマンド"
-auto_ssh_with_config "ユーザー@ホスト" "パスワード" "コマンド"
+#鍵認証
+#auto_ssh_with_config "ユーザー@ホスト" "sshキーパスワード" "コマンド"
+#鍵認証なし
+#auto_ssh_with_config "ユーザー@ホスト" "サーバー入る時の平文パスワード" "コマンド"
 
 
 auto_ssh_with_config() {
 	ssh_account=$1
 	pass=$2
-	ssh_key=$3
 	command=$4
 
 	expect -c "
